@@ -1,0 +1,10 @@
+const words = [
+  "SEVGILI", "KELEBEK", "YILDIZ", "OKYANUS", "GITAR", "BAHCE", "KUTUPHANE",
+  "PENCERE", "YAGMUR", "GUNES", "DENIZ", "ORMAN", "KOPRU", "KAHVE",
+  "MUZIK", "RESSAM", "SEHIR", "YOLCULUK", "HEDIYE", "ANI", "GULUMSEME",
+  "MEKTUP", "FENER", "RUZGAR", "CICEK", "KALEM", "DEFTER", "SARKI",
+  "BULUT", "NEHIR", "DAG", "TREN", "UCAK", "GEMI", "KOSE", "SOKAK",
+  "PARK", "PLAJ", "ADA", "HARITA", "PUSULA"
+];
+
+module.exports = words;

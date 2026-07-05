@@ -1,0 +1,22 @@
+module.exports = [
+  { emoji: "🍕🧀", answer: "PIZZA" },
+  { emoji: "🐱‍👤", answer: "KEDI" },
+  { emoji: "🌧️☂️", answer: "YAGMUR" },
+  { emoji: "❤️💍", answer: "EVLILIK" },
+  { emoji: "🎂🕯️", answer: "DOGUMGUNU" },
+  { emoji: "✈️🌍", answer: "SEYAHAT" },
+  { emoji: "🌙⭐", answer: "GECE" },
+  { emoji: "☀️🏖️", answer: "PLAJ" },
+  { emoji: "🎬🍿", answer: "SINEMA" },
+  { emoji: "📚🤓", answer: "KITAP" },
+  { emoji: "🐶🦴", answer: "KOPEK" },
+  { emoji: "🎸🎤", answer: "KONSER" },
+  { emoji: "☕🌅", answer: "KAHVALTI" },
+  { emoji: "🚗💨", answer: "ARABA" },
+  { emoji: "🌸🦋", answer: "BAHAR" },
+  { emoji: "🔥❤️", answer: "ASK" },
+  { emoji: "🎁🎉", answer: "SURPRIZ" },
+  { emoji: "🧩🧠", answer: "BULMACA" },
+  { emoji: "🌊🏄", answer: "SURF" },
+  { emoji: "🍰🎈", answer: "PARTI" }
+];

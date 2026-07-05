@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  username    String   @unique
+  email       String?  @unique
+  password    String?  // null for guest users
+  avatar      String   @default("🦊")
+  isGuest     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  matchesAsP1 Match[]  @relation("player1")
+  matchesAsP2 Match[]  @relation("player2")
+  gameResults GameResult[]
+  achievements UserAchievement[]
+  messages    Message[]
+  onlineStatus OnlinePlayer?
+  friendsA    Friend[] @relation("userA")
+  friendsB    Friend[] @relation("userB")
+  leaderboardEntries LeaderboardEntry[]
+
+  @@map("users")
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  gameType  String
+  status    String   @default("lobby")
+  createdAt DateTime @default(now())
+  closedAt  DateTime?
+
+  matches   Match[]
+  messages  Message[]
+
+  @@map("rooms")
+}
+
+model Match {
+  id         String   @id @default(cuid())
+  roomId     String
+  room       Room     @relation(fields: [roomId], references: [id])
+  gameType   String
+  player1Id  String
+  player1    User     @relation("player1", fields: [player1Id], references: [id])
+  player2Id  String
+  player2    User     @relation("player2", fields: [player2Id], references: [id])
+  winnerId   String?
+  score1     Int      @default(0)
+  score2     Int      @default(0)
+  startedAt  DateTime @default(now())
+  endedAt    DateTime?
+
+  results    GameResult[]
+
+  @@map("matches")
+}
+
+model GameResult {
+  id        String   @id @default(cuid())
+  matchId   String
+  match     Match    @relation(fields: [matchId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  result    String   // "win" | "lose" | "draw"
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@map("game_results")
+}
+
+model Friend {
+  id        String   @id @default(cuid())
+  userAId   String
+  userA     User     @relation("userA", fields: [userAId], references: [id])
+  userBId   String
+  userB     User     @relation("userB", fields: [userBId], references: [id])
+  status    String   @default("pending") // pending | accepted | blocked
+  createdAt DateTime @default(now())
+
+  @@unique([userAId, userBId])
+  @@map("friends")
+}
+
+model OnlinePlayer {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  socketId  String
+  status    String   @default("online") // online | in_game | away
+  lastSeen  DateTime @default(now())
+
+  @@map("online_players")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+
+  @@map("messages")
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  title       String
+  description String
+  icon        String   @default("🏆")
+
+  users       UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model LeaderboardEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  period    String   // "weekly" | "monthly" | "alltime"
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  points    Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, period])
+  @@map("leaderboard")
+}
